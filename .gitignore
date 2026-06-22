@@ -1,53 +1,29 @@
 # Python
 __pycache__/
 *.py[cod]
+*.pyo
+.pytest_cache/
+.mypy_cache/
+htmlcov/
+.coverage
 *.egg-info/
-*.egg
 dist/
 build/
-.eggs/
-
-# Virtual environment
 venv/
 .venv/
-env/
 
-# Environment secrets
-.env
-
-# Database files (generated — not committed)
+# DB
 *.db
 *.db-shm
 *.db-wal
 
-# Data files (too large / proprietary)
-data/raw/*.xlsx
-data/raw/*.xls
-data/raw/*.csv
-
-# Outputs (generated)
-output/*.csv
+# Env
+.env
 
 # Logs
 logs/
-
-# IDE
-.vscode/
-.idea/
-*.swp
-*.swo
-
-# Jupyter checkpoints
-.ipynb_checkpoints/
+*.log
 
 # OS
 .DS_Store
 Thumbs.db
-
-# Coverage
-.coverage
-htmlcov/
-.pytest_cache/
-
-# mypy
-.mypy_cache/

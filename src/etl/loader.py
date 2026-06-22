@@ -211,9 +211,7 @@ class FinancialLoader(BaseLoader):
         return df
 
     def _insert_row(self, conn, row):
-        with db_session.__func__.__closure__:  # access conn directly
-            pass
-        return True   # overridden below per table
+        raise NotImplementedError("Subclasses must implement _insert_row")
 
 
 class ProfitLossLoader(FinancialLoader):
@@ -477,6 +475,62 @@ class ProsConsLoader(BaseLoader):
         return True
 
 
+class PeerGroupLoader(BaseLoader):
+    table_name = "peer_groups"
+    source_file = "peer_groups.xlsx"
+
+    def _transform(self, df: pd.DataFrame) -> pd.DataFrame:
+        if "ticker" not in df.columns and "symbol" in df.columns:
+            df = df.rename(columns={"symbol": "ticker"})
+        df["ticker"] = df["ticker"].apply(lambda x: normalize_ticker(x) if pd.notna(x) else None)
+        df["peer_ticker"] = df["peer_ticker"].apply(
+            lambda x: normalize_ticker(x) if pd.notna(x) else None
+        )
+        df = df.dropna(subset=["ticker", "peer_ticker"])
+        return df
+
+    def _insert_row(self, conn, row):
+        cid = conn.execute(
+            "SELECT company_id FROM companies WHERE ticker = ?;", (row["ticker"],)
+        ).fetchone()
+        if not cid:
+            return False
+        pid = conn.execute(
+            "SELECT company_id FROM companies WHERE ticker = ?;", (row["peer_ticker"],)
+        ).fetchone()
+        if not pid:
+            return False
+        conn.execute(
+            """
+            INSERT OR IGNORE INTO peer_groups (company_id, peer_company_id, sector)
+            VALUES (?, ?, ?);
+            """,
+            (cid[0], pid[0], clean_string(row.get("sector"))),
+        )
+        return True
+
+
+class MarketDataLoader(BaseLoader):
+    table_name = "companies"   # updates existing companies rows
+    source_file = "market_data.xlsx"
+
+    def _transform(self, df: pd.DataFrame) -> pd.DataFrame:
+        df["ticker"] = df["ticker"].apply(lambda x: normalize_ticker(x) if pd.notna(x) else None)
+        df = df.dropna(subset=["ticker"])
+        return df
+
+    def _insert_row(self, conn, row):
+        # Update market_cap_cr if the record exists
+        conn.execute(
+            """
+            UPDATE companies SET market_cap_cr = ?
+            WHERE ticker = ? AND market_cap_cr IS NULL;
+            """,
+            (row.get("market_cap_cr"), row["ticker"]),
+        )
+        return True
+
+
 # ── Load order (respects FK dependencies) ─────────────────────────────────────
 
 LOAD_ORDER: list[type[BaseLoader]] = [
@@ -490,6 +544,8 @@ LOAD_ORDER: list[type[BaseLoader]] = [
     AnalysisLoader,
     DocumentsLoader,
     ProsConsLoader,
+    PeerGroupLoader,
+    MarketDataLoader,
 ]
 
 

@@ -173,6 +173,18 @@ CREATE TABLE IF NOT EXISTS prosandcons (
 
 CREATE INDEX IF NOT EXISTS idx_poc_company ON prosandcons(company_id);
 
+-- ── 11. peer_groups ────────────────────────────────────────────────────────
+CREATE TABLE IF NOT EXISTS peer_groups (
+    peer_id         INTEGER PRIMARY KEY AUTOINCREMENT,
+    company_id      INTEGER NOT NULL REFERENCES companies(company_id) ON DELETE CASCADE,
+    peer_company_id INTEGER NOT NULL REFERENCES companies(company_id) ON DELETE CASCADE,
+    sector          TEXT,
+    created_at      TEXT NOT NULL DEFAULT (datetime('now')),
+    UNIQUE (company_id, peer_company_id)
+);
+
+CREATE INDEX IF NOT EXISTS idx_pg_company ON peer_groups(company_id);
+
 -- ── Audit / Meta ───────────────────────────────────────────────────────────
 CREATE TABLE IF NOT EXISTS load_audit_log (
     audit_id        INTEGER PRIMARY KEY AUTOINCREMENT,

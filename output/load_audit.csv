@@ -1,0 +1,13 @@
+table_name,source_file,rows_attempted,rows_inserted,rows_rejected,status,notes,run_at
+sectors,sectors.xlsx,12,12,0,OK,,2026-06-22T09:06:52
+companies,companies.xlsx,92,92,0,OK,,2026-06-22T09:06:52
+profitandloss,profit_and_loss.xlsx,460,460,0,OK,,2026-06-22T09:06:52
+balancesheet,balance_sheet.xlsx,460,460,0,OK,,2026-06-22T09:06:52
+cashflow,cash_flow.xlsx,460,460,0,OK,,2026-06-22T09:06:53
+financial_ratios,financial_ratios.xlsx,460,460,0,OK,,2026-06-22T09:06:53
+stock_prices,stock_prices.xlsx,5520,5520,0,OK,,2026-06-22T09:06:53
+analysis,analysis.xlsx,92,92,0,OK,,2026-06-22T09:06:53
+documents,documents.xlsx,276,276,0,OK,,2026-06-22T09:06:53
+prosandcons,prosandcons.xlsx,368,368,0,OK,,2026-06-22T09:06:53
+peer_groups,peer_groups.xlsx,354,354,0,OK,,2026-06-22T09:06:53
+companies,market_data.xlsx,92,92,0,OK,,2026-06-22T09:06:53
