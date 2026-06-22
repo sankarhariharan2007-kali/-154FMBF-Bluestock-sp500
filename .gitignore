@@ -1,0 +1,53 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+*.egg
+dist/
+build/
+.eggs/
+
+# Virtual environment
+venv/
+.venv/
+env/
+
+# Environment secrets
+.env
+
+# Database files (generated — not committed)
+*.db
+*.db-shm
+*.db-wal
+
+# Data files (too large / proprietary)
+data/raw/*.xlsx
+data/raw/*.xls
+data/raw/*.csv
+
+# Outputs (generated)
+output/*.csv
+
+# Logs
+logs/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Jupyter checkpoints
+.ipynb_checkpoints/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Coverage
+.coverage
+htmlcov/
+.pytest_cache/
+
+# mypy
+.mypy_cache/
